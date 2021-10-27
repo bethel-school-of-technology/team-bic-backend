@@ -19,30 +19,32 @@ public class UserController {
 	@Autowired
     UserRepository dao;
 	
+	@Autowired
+    RoutineRepository routine_dao;
 	
 	@PostMapping("/register")
 	  public void register(@RequestBody User newUser) {
 	    userService.Save(newUser);
 	  }
 	
-	/*
-	@GetMapping("/login")
-    public String login(Model model, String error, String logout) {
-        if (error != null)
-            model.addAttribute("error", "Your username and password is invalid.");
+	@GetMapping("/getAllRoutines/{user_id}")
+	@ResponseBody
+	public ResponseEntity<List<Routine>> findByUser_id(@PathVariable Long user_id) {
 
-        if (logout != null)
-            model.addAttribute("message", "You have been logged out successfully.");
-
-        return "login";
-    }
-    */
+		List<Routine> routineResponse = (List<Routine>) routine_dao.findByUserUserId(user_id);
+		return ResponseEntity.ok(routineResponse);
+	}
 	
 	@PutMapping("/editUser/{user_id}")
-	public ResponseEntity<User> putRoutine(@PathVariable(value="user_id") Long user_id) {
+	public ResponseEntity<User> putRoutine(@PathVariable(value="user_id") Long user_id, @RequestBody User user) {
 	    
 		User foundUser= dao.findById(user_id).orElse(null);
-		User updatedUser= dao.save(foundUser);
+		
+		if (foundUser == null) {
+	    	return ResponseEntity.ok(foundUser);
+	    }
+		
+		User updatedUser= dao.save(user);
 	    return ResponseEntity.ok(updatedUser);
 	}
 	

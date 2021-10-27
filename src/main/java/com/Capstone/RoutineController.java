@@ -40,13 +40,14 @@ public class RoutineController {
 	}
 	
 	@PutMapping("/editRoutine/{routine_id}")
-	public ResponseEntity<Routine> putRoutine(@PathVariable(value="routine_id") Long routine_id) {
-	//public ResponseEntity<Routine> putRoutine(@PathVariable(value="routine_id") Long routine_id, @RequestBody Routine routine) {  
+	//public ResponseEntity<Routine> putRoutine(@PathVariable(value="routine_id") Long routine_id) {
+	public ResponseEntity<Routine> putRoutine(@PathVariable(value="routine_id") Long routine_id, @RequestBody Routine routine) {  
 	    Routine foundRoutine = dao.findById(routine_id).orElse(null);
-	    //routine = (Routine) dao.save(routine;)
-	    //Routine routine = (Routine) routine_dao.findById(createRoutineWorkoutRequest.routine_id).orElse(null);		
-	    
-	    Routine updatedRoutine = dao.save(foundRoutine);
+	    		
+	    if (foundRoutine == null) {
+	    	return ResponseEntity.ok(foundRoutine);
+	    }
+	    Routine updatedRoutine = dao.save(routine);
 	    
 	    
 	    return ResponseEntity.ok(updatedRoutine);

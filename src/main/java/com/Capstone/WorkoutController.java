@@ -20,7 +20,7 @@ public class WorkoutController {
     WorkoutRepository dao;
 	
 	
-	@GetMapping("/add_workout/{workout_id}")
+	@GetMapping("/selectWorkout/{workout_id}")
     public ResponseEntity<Workout> getWorkouts(@PathVariable(value="workout_id") Long workout_id) {
         Workout foundWorkout= dao.findById(workout_id).orElse(null);
 
@@ -29,6 +29,12 @@ public class WorkoutController {
         }
         return ResponseEntity.ok(foundWorkout);
     }
+	
+	@GetMapping("/getWorkouts")
+	public List<Workout> getWorkout() {
+	    List<Workout> foundWorkout = dao.findAll();
+	    return foundWorkout;
+	}
 	
 	@PostMapping("/createWorkout")
 	public ResponseEntity<Workout> postWorkout(@RequestBody Workout workout) {
