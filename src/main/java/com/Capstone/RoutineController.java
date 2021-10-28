@@ -2,6 +2,8 @@ package com.Capstone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
+
+
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,17 @@ public class RoutineController {
         return ResponseEntity.ok(foundRoutine);
     }
 	
+	@DeleteMapping("/deleteRoutine/{routine_id}")
+    public ResponseEntity<Routine> deleteRoutine(@PathVariable(value="routine_id") Long routine_id) {
+        Routine foundRoutine = dao.findById(routine_id).orElse(null);
+
+        if(foundRoutine == null) {
+            return ResponseEntity.notFound().header("Post","Nothing found with that id").build();
+        }else {
+            dao.delete(foundRoutine);
+        }
+        return ResponseEntity.ok().build();
+    }
 	
 	@PostMapping("/createRoutine")
 	public ResponseEntity<Routine> postRoutine(@RequestBody Routine routine) {

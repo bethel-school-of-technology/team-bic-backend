@@ -36,7 +36,18 @@ public class routineWorkoutController {
         }
         return ResponseEntity.ok(foundRoutineWorkout);
     }
-	
+    
+    @DeleteMapping("/deleteRoutineWorkout/{routineWorkout_id}")
+    public ResponseEntity<routineWorkout> deleteRoutineWorkout(@PathVariable(value="routineWorkout_id") Long routineWorkout_id) {
+        routineWorkout foundRoutineWorkout = dao.findById(routineWorkout_id).orElse(null);
+
+        if(foundRoutineWorkout == null) {
+            return ResponseEntity.notFound().header("RoutineWorkout","Nothing found with that id").build();
+        }else {
+            dao.delete(foundRoutineWorkout);
+        }
+        return ResponseEntity.ok().build();
+    }
     
     @PostMapping("/createRoutineWorkout")
 	 public ResponseEntity<routineWorkout> postRoutineWorkout(@RequestBody CreateRoutineWorkoutRequest createRoutineWorkoutRequest) {
